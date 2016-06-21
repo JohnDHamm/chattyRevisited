@@ -26,6 +26,7 @@ var Chatty = (function(chatty){
 
 	chatty.deleteMessage = function(event){
 		var targetMessage = event.currentTarget; //get the whole message (inc delete button)
+		console.log("targetMessage", targetMessage);
 		var targetMessageID = targetMessage.id; //get the above message's id
 		var idNum = targetMessageID.split("--")[1]; //get the index of the id only
 		var messageToDelete = document.getElementById(targetMessageID); //get the DOm element to delete
