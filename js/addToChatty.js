@@ -43,66 +43,88 @@ var Chatty = (function(chatty){
 		var messages = Chatty.getMessageArray();
 		//if there is text in the input OR the initial messages are not done loading, then input to the DOM
 		//this stops random delete buttons from being created when enter is pressed
-		var userSelection = document.getElementById("users"); //targets div with all radio buttons for user names
+		// var userSelection = document.getElementById("users"); //targets div with all radio buttons for user names
 
 		if(document.getElementById("messageTextInput").value !== "" || 5 > idNum ){
 
 			if (idNum > 4) {  
 				arrayObject.timestamp = Chatty.timeStamp(); //adding timestamp to array for new messages after the first 5
-				arrayObject.user = userSelection.elements["userRadioBtn"].value; //gets value of user radio buttons
+				arrayObject.user = $('input[name="userRadioBtn"]:checked').val(); //gets value of user radio buttons
 
-				if (arrayObject.user === "") {
+				if (arrayObject.user === undefined) {
 					alert("Please select a user!");
 					return;
 				};
 
 			};
 
-			var newMessageDiv = document.createElement("div"); //create the div
-			var messages = Chatty.getMessageArray(); //get the messages
+			$("#output").append(`<div id="messageBlock--${idNum}" class="container">
+				<span class="timestamp">${messages[idNum].timestamp}</span>
+				<span class="userName">${messages[idNum].user}:  </span>
+				<span id="messageText--${idNum}" class="messageText">${messages[idNum].message}</span>
+				<button id="messageButton--${idNum}">Delete</button>
+				<button id="editMessage--${idNum}">Edit</button>
+				</div>`);
+			// var newMessageDiv = document.createElement("div"); //create the div
+			// var messages = Chatty.getMessageArray(); //get the messages
 
-			var newMessageTimestamp = document.createElement("span");  //create a span for timestamp 
-			newMessageTimestamp.innerHTML = messages[idNum].timestamp;  //put the timestamp in the span
-			newMessageTimestamp.classList.add("timestamp"); //add class for styling
+			// var newMessageTimestamp = document.createElement("span");  //create a span for timestamp 
+			// newMessageTimestamp.innerHTML = messages[idNum].timestamp;  //put the timestamp in the span
+			// newMessageTimestamp.classList.add("timestamp"); //add class for styling
 
-			var newMessageUser = document.createElement("span");
-			newMessageUser.innerHTML = messages[idNum].user + ": ";
-			newMessageUser.classList.add("userName");
+			// var newMessageUser = document.createElement("span");
+			// newMessageUser.innerHTML = messages[idNum].user + ": ";
+			// newMessageUser.classList.add("userName");
 
-			var newMessageText = document.createElement("span");  //create a span for message
-			newMessageText.innerHTML = messages[idNum].message; //put the message in the span
-			newMessageText.classList.add("messageText"); //add class for styling
+			// var newMessageText = document.createElement("span");  //create a span for message
+			// newMessageText.innerHTML = messages[idNum].message; //put the message in the span
+			// newMessageText.classList.add("messageText"); //add class for styling
 
-			var newMessageDelButton = document.createElement("button"); //add a new button element
-			newMessageDelButton.innerHTML = "Delete"; //call it delete
-			var editCurrentMessageButton = document.createElement("button");
-			editCurrentMessageButton.innerHTML = "Edit";
-			var outputArea = document.getElementById("output"); //identify the output area
-
-
-			var newMessageID = document.createAttribute("id"); //add an ID
-			var newDelButtonID = document.createAttribute("id");
-			var messageID = document.createAttribute("id"); //this is the actual message area test
-			var editMessageID = document.createAttribute("id");
-			newMessageID.value = `messageBlock--${idNum}`; //set the IDs
-			newDelButtonID.value = `messageButton--${idNum}`;
-			messageID.value = `messageText--${idNum}`;
-			editMessageID.value = `editMessage--${idNum}`
-			newMessageDiv.setAttributeNode(newMessageID); //add the IDs to the message and button
-			newMessageDelButton.setAttributeNode(newDelButtonID);
-			newMessageText.setAttributeNode(messageID);
-			editCurrentMessageButton.setAttributeNode(editMessageID);
+			// var newMessageDelButton = document.createElement("button"); //add a new button element
+			// newMessageDelButton.innerHTML = "Delete"; //call it delete
+			// var editCurrentMessageButton = document.createElement("button");
+			// editCurrentMessageButton.innerHTML = "Edit";
+			// var outputArea = document.getElementById("output"); //identify the output area
 
 
-			outputArea.appendChild(newMessageDiv); //add the new message
-			newMessageDiv.appendChild(newMessageTimestamp);
-			newMessageDiv.appendChild(newMessageUser);
-			newMessageDiv.appendChild(newMessageText);
-			newMessageDiv.appendChild(newMessageDelButton); //add button to the message
-			newMessageDiv.appendChild(editCurrentMessageButton); //add button to the message
+			// var newMessageID = document.createAttribute("id"); //add an ID
+			// var newDelButtonID = document.createAttribute("id");
+			// var messageID = document.createAttribute("id"); //this is the actual message area test
+			// var editMessageID = document.createAttribute("id");
+			// newMessageID.value = `messageBlock--${idNum}`; //set the IDs
+			// newDelButtonID.value = `messageButton--${idNum}`;
+			// messageID.value = `messageText--${idNum}`;
+			// editMessageID.value = `editMessage--${idNum}`
+			// newMessageDiv.setAttributeNode(newMessageID); //add the IDs to the message and button
+			// newMessageDelButton.setAttributeNode(newDelButtonID);
+			// newMessageText.setAttributeNode(messageID);
+			// editCurrentMessageButton.setAttributeNode(editMessageID);
 
-			document.getElementById("messageTextInput").value = ""; //reset the input field
-			document.getElementById(`messageBlock--${idNum}`).addEventListener("click", Chatty.deleteMessage);
+
+			// outputArea.appendChild(newMessageDiv); //add the new message
+			// newMessageDiv.appendChild(newMessageTimestamp);
+			// newMessageDiv.appendChild(newMessageUser);
+			// newMessageDiv.appendChild(newMessageText);
+			// newMessageDiv.appendChild(newMessageDelButton); //add button to the message
+			// newMessageDiv.appendChild(editCurrentMessageButton); //add button to the message
+
+			// document.getElementById("messageTextInput").value = ""; //reset the input field
+			$("#messageTextInput").val(""); //reset the input field
+
+			$(document).on("click", `#messageButton--${idNum}`, function(){
+				 $(this).parents(".container").remove();
+			// 	Chatty.deleteMessage;
+			});
+
+			// $(document).on("click", "button[id^='messageButton--']", function() {
+   //  		$(this).parents(".container").remove();
+   //  		// Chatty.deleteMessage;
+  	// 	});
+			// document.getElementById(`messageBlock--${idNum}`).addEventListener("click", Chatty.deleteMessage);
+			// $(document).on("click", "button[id^='editMessage--']", function(){
+			// 	Chatty.editSelectedMessage;
+			// })
+
 			document.getElementById(`messageBlock--${idNum}`).addEventListener("click", Chatty.editSelectedMessage);
 		}	else {
 			alert("Write something in the box, please!");
